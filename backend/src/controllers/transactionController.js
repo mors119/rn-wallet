@@ -1,26 +1,23 @@
-import express from 'express';
 import { sql } from '../config/db.js';
 
-const router = express.Router();
-
-router.get('/:userId', async (req, res) => {
+export async function getTransactionsByUserId(req, res) {
   try {
     const { userId } = req.params;
 
     console.log('user ID:', userId);
 
     const transactions = await sql`
-      SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY created_at DESC
-    `;
+        SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY created_at DESC
+      `;
 
     res.status(200).json(transactions);
   } catch (error) {
     console.log('Error getting the transactions', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-});
+}
 
-router.post('/', async (req, res) => {
+export async function createTransaction(req, res) {
   // title, amount, category, user_id
   try {
     const { title, amount, category, user_id } = req.body;
@@ -30,19 +27,19 @@ router.post('/', async (req, res) => {
     }
 
     const [transaction] = await sql`
-    INSERT INTO transactions(user_id, title, amount, category)
-    VALUES (${user_id}, ${title}, ${amount}, ${category})
-    RETURNING *
-    `;
+      INSERT INTO transactions(user_id, title, amount, category)
+      VALUES (${user_id}, ${title}, ${amount}, ${category})
+      RETURNING *
+      `;
 
     res.status(201).json(transaction);
   } catch (error) {
     console.log('Error creating the transaction', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-});
+}
 
-router.delete('/:id', async (req, res) => {
+export async function deleteTransaction(req, res) {
   try {
     const { id } = req.params;
 
@@ -63,9 +60,9 @@ router.delete('/:id', async (req, res) => {
     console.log('Error getting the transactions', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-});
+}
 
-router.get('/summary/:userId', async (req, res) => {
+export async function getSummaryByUserId(req, res) {
   try {
     const { userId } = req.params;
 
@@ -90,6 +87,4 @@ router.get('/summary/:userId', async (req, res) => {
     console.log('Error getting the transactions', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-});
-
-export default router;
+}
