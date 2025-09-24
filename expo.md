@@ -8,4 +8,6 @@
 
 #### r
 
-clerk password: 1a!2s@3d#4f$
+#### clerk password:
+
+1a!2s@3d#4f$
