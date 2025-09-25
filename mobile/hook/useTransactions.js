@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Alert } from 'react-native';
-
-const API_URL = 'http://localhost:5001/api';
+import { API_URL } from '../constants/api';
 
 export const useTransactions = (userId) => {
   const [transactions, setTransactions] = useState();
@@ -22,6 +21,7 @@ export const useTransactions = (userId) => {
       console.error('Error fetching transactions', error);
     }
   }, [userId]);
+
   const fetchSummary = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/transactions/summary/${userId}`);

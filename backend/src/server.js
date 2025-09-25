@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import cors from 'cors';
+import job from './config/cron.js';
 
 import transactionRoute from './routes/transactionsRouter.js';
 
@@ -13,6 +14,8 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+if (process.env.API_URL && process.env.NODE_ENV === 'production') job.start();
 
 // 프록시 뒤(Cloudflare/NGINX/Render/Vercel 등)에서 req.ip를 신뢰하려면:
 // app.set('trust proxy', 1);
